@@ -1,8 +1,11 @@
 // This is an example configuration file. Rename this file to development.js
 // and set the values to get going.
+
+require('dotenv').config();
+
 var settings = {
   db: {
-    connectionString: 'mongodb://localhost/appoints'
+    connectionString: process.env.MONGO_CONNSTRING
   }, 
   authProviders: {
     facebook: { 
@@ -11,8 +14,8 @@ var settings = {
       callbackUrl: 'http://localhost:3000/auth/facebook/callback' 
     },
     google: { 
-      clientId: 'your client id here', 
-      clientSecret: 'your client secret here', 
+      clientId: process.env.GOOGLE_CLIENTID, 
+      clientSecret: process.env.GOOGLE_CLIENTSECRET, 
       callbackUrl: 'http://localhost:3000/auth/google/callback' 
     }
   },
