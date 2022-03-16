@@ -5,6 +5,7 @@ var cors = require('cors');
 var passport = require('passport');
 var config = require('./config');
 var passportConfig = require('./passport-config');
+require('dotenv').config();
 
 var mediaTypes = [
   { contentType: 'application/hal+json' },
