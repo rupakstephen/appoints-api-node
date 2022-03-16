@@ -15,6 +15,8 @@ router.get('/', index.index);
 // Me
 router.get('/me', middleware.ensureAuthenticated, me)
 
+router.get('/all',)
+
   // Authentication provider routes
 router.get('/auth/google', 
   passport.authenticate('google', { scope: ['email', 'profile'] })
@@ -34,6 +36,10 @@ router.route('/appointments')
   .all(middleware.ensureAuthenticated)
   .get(appointments.getByUser)
   .post(middleware.sanitizeRequestBody, appointments.create);
+
+router.route('/appointments/all')
+  .all(middleware.ensureAuthenticated)
+  .get(appointments.getAll)
 
 router.route('/appointments/:id')
   .all(middleware.ensureAuthenticated)

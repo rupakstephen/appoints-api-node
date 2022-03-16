@@ -1,4 +1,5 @@
 var Appointment = require('../models/appointment');
+const { app } = require('../server');
 
 function mapAppointment(dbAppointment) {
   var halAppointment = {
@@ -15,6 +16,19 @@ function mapAppointment(dbAppointment) {
   };
   return halAppointment;
 }
+
+
+function mapAppointmentAll(dbAppointment) {
+  var halAppointment = {
+    id: dbAppointment.id,
+    title: dbAppointment.title,
+    dateAndTime: dbAppointment.dateAndTime,
+    endDateAndTime: dbAppointment.endDateAndTime,
+    duration: dbAppointment.duration,
+  };
+  return halAppointment;
+}
+
 
 exports.create = function (req, res) {
   var newAppointment = new Appointment(req.body);
@@ -75,6 +89,33 @@ exports.getByUser = function (req, res) {
       res.status(200).send(result);
     });  
 };
+
+exports.getAll = function (req, res) {
+
+  var result = {
+    _links: {
+      self: { href: '/appointments' }
+    },
+    _embedded: {
+      appointment: []
+    },
+    count: 0
+  };
+  Appointment
+    .find({})
+    .sort('-dateAndTime')
+    .exec(function (err, appointments) {
+      if (err) {
+        throw err;
+      }
+      result.count = appointments.length;
+      for (var i = 0; i < result.count; i++) {
+        result._embedded.appointment.push(mapAppointmentAll(appointments[i]));
+      }
+      res.status(200).send(result);
+    }); 
+
+}
 
 exports.update = function (req, res) {
   var appointmentId = req.params.id;
