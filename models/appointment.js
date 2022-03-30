@@ -9,6 +9,7 @@ var AppointmentSchema = new Schema({
   },
   dateAndTime: { type: Date, required: true },
   endDateAndTime: { type: Date, required: true },
+  barberId: {type: String, required: true},
   remarks: String
 });
 
@@ -32,7 +33,8 @@ AppointmentSchema.path('dateAndTime').validate({
         'user.id': self.user.id,
         $or: [ 
           { dateAndTime: { $lt: self.endDateAndTime, $gte: self.dateAndTime } }, 
-          { endDateAndTime: { $lte: self.endDateAndTime, $gt: self.dateAndTime } }
+          { endDateAndTime: { $lte: self.endDateAndTime, $gt: self.dateAndTime } },
+          { barberId: self.barberId}
         ] 
       }, function (err, appointments) {
         resolve(! appointments || appointments.length === 0);

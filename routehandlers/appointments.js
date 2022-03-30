@@ -101,6 +101,8 @@ exports.getAll = function (req, res) {
     },
     count: 0
   };
+
+  
   Appointment
     .find({})
     .sort('-dateAndTime')
