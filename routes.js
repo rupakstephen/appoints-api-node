@@ -31,6 +31,14 @@ router.post('/auth/google', auth.googletoken);
 
 router.get('/auth/loggedin', auth.loggedin);
 
+router.get('/auth/facebook',
+  passport.authenticate('facebook', {scope: ['public_profile','email'] }));
+
+router.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login'}),
+  auth.externalcallback
+);
+
 // Appointments
 router.route('/appointments')
   .all(middleware.ensureAuthenticated)

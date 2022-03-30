@@ -1,6 +1,7 @@
 var config = require('./config');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var FacebookStrategy = require('passport-facebook');
 var User = require('./models/user');
 
 function handleProviderResponse(provider, userId, email, displayName, accessToken, refreshToken, callback) {
@@ -35,9 +36,20 @@ exports.configure = function () {
       callbackURL: config.settings.authProviders.google.callbackUrl
     },
     function(accessToken, refreshToken, profile, done) {
-      return handleProviderResponse('google', profile.id, profile.emails[0].value, profile.displayName, accessToken, refreshToken, done);
+      return handleProviderResponse(profile.provider, profile.id, profile.emails[0].value, profile.displayName, accessToken, refreshToken, done);
     }
   ));
+
+  passport.use(new FacebookStrategy({
+    clientID: config.settings.authProviders.facebook.clientId,
+    clientSecret: config.settings.authProviders.facebook.clientSecret,
+    callbackURL: config.settings.authProviders.facebook.callbackUrl,
+    profileFields: ['id','displayName', 'emails', 'name']
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    return handleProviderResponse(profile.provider, profile.id, profile.emails[0].value, profile.displayName, accessToken, refreshToken, cb);
+  }
+));
 
   passport.serializeUser(function (user, done) {
     done(null, user);
@@ -45,6 +57,14 @@ exports.configure = function () {
 
   passport.deserializeUser(function (obj, done) {
     done(null, obj);
+  });
+
+  passport.serializeUser(function(user, cb) {
+    cb(null, user);
+  });
+
+  passport.deserializeUser(function(obj, cb) {
+    cb(null, obj);
   });
 
 }

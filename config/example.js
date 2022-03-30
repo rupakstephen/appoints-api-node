@@ -9,14 +9,14 @@ var settings = {
   }, 
   authProviders: {
     facebook: { 
-      clientId: 'your client id here', 
-      clientSecret: 'your client secret here', 
-      callbackUrl: 'http://localhost:3000/auth/facebook/callback' 
+      clientId: process.env.FB_CLIENTID, 
+      clientSecret: process.env.FB_CLIENTSECRET, 
+      callbackUrl: 'http://localhost:3001/auth/facebook/callback' 
     },
     google: { 
       clientId: process.env.GOOGLE_CLIENTID, 
       clientSecret: process.env.GOOGLE_CLIENTSECRET, 
-      callbackUrl: 'http://localhost:3000/auth/google/callback' 
+      callbackUrl: 'http://localhost:3001/auth/google/callback' 
     }
   },
   tokenSecret: 'my super duper shared secret',
