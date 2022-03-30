@@ -31,11 +31,14 @@ AppointmentSchema.path('dateAndTime').validate({
       mongoose.models.Appointment.find( { 
         '_id': { $ne: self._id },
         'user.id': self.user.id,
-        $or: [ 
+        $and: [ 
           { dateAndTime: { $lt: self.endDateAndTime, $gte: self.dateAndTime } }, 
+          { barberId: self.barberId}
+        ],
+        $and: [
           { endDateAndTime: { $lte: self.endDateAndTime, $gt: self.dateAndTime } },
           { barberId: self.barberId}
-        ] 
+        ]
       }, function (err, appointments) {
         resolve(! appointments || appointments.length === 0);
       });  
